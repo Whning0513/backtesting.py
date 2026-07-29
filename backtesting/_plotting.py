@@ -75,6 +75,7 @@ def _windos_safe_filename(filename):
         return re.sub(r'[^a-zA-Z0-9,_-]', '_', filename.replace('=', '-'))
     return filename
 
+
 def _remove_timezone(values):
     if isinstance(values, pd.DatetimeIndex):
         return values.tz_localize(None) if values.tz is not None else values
