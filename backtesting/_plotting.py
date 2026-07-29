@@ -75,14 +75,14 @@ def _windos_safe_filename(filename):
         return re.sub(r'[^a-zA-Z0-9,_-]', '_', filename.replace('=', '-'))
     return filename
 
-
-
 def _remove_timezone(values):
     if isinstance(values, pd.DatetimeIndex):
         return values.tz_localize(None) if values.tz is not None else values
     if isinstance(values, pd.Series) and isinstance(values.dtype, pd.DatetimeTZDtype):
         return values.dt.tz_localize(None)
     return values
+
+
 def _bokeh_reset(filename=None):
     curstate().reset()
     if filename:
@@ -275,7 +275,7 @@ def plot(*, results: pd.Series,
 
     trade_source = ColumnDataSource(dict(
         index=trades['ExitBar'],
-        datetime=trades['ExitTime'],
+        datetime=_remove_timezone(trades['ExitTime']),
         size=trades['Size'],
         returns_positive=(trades['ReturnPct'] > 0).astype(int).astype(str),
     ))
